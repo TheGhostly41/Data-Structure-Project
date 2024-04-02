@@ -1,6 +1,5 @@
 #pragma once
-
-#include <iostream>
+#include<iostream>
 
 using namespace std;
 
@@ -8,7 +7,6 @@ typedef int Type;
 const int UNDEFINED = -1;
 
 class LinkQueue {
-
 private:
 	// Node Class
 	class Node {
@@ -22,22 +20,23 @@ private:
 		}
 	};
 
+	// data members
 	Node* front, * back;
 
 public:
-	// Constructor
+	// constructor
 	LinkQueue() {
 		front = back = nullptr;
 	}
 
-	// Destructor
+	// destructor
 	~LinkQueue() {
 		while (!isEmpty()) {
 			dequeue();
 		}
 	}
 
-	//Copy Constructor
+	// copy constructor
 	LinkQueue(const LinkQueue& source) {
 		Node* srcPtr = source.front;
 		front = back = nullptr;
@@ -48,15 +47,16 @@ public:
 		}
 	}
 
-	// Assignment Operator
+	// overloaded assignment operator
 	LinkQueue& operator=(const LinkQueue& source) {
 		if (this != &source) {
+
 			while (!isEmpty()) {
 				dequeue();
 			}
 
 			Node* srcPtr = source.front;
-			
+
 			while (srcPtr != nullptr) {
 				enqueue(srcPtr->data);
 				srcPtr = srcPtr->next;
@@ -66,7 +66,8 @@ public:
 		return *this;
 	}
 
-	// Other operations
+	// Other Operations
+
 	bool isEmpty() const {
 		return front == nullptr;
 	}
@@ -91,6 +92,8 @@ public:
 			count++;
 			ptr = ptr->next;
 		}
+
+		return count;
 	}
 
 	Type peek() const {
@@ -109,10 +112,10 @@ public:
 
 		Node* ptr = front;
 		front = front->next;
-
 		delete ptr;
 
 		if (front == nullptr) {
+			// when the last node just get removed
 			back = nullptr;
 		}
 
@@ -131,7 +134,7 @@ public:
 			back = ptr;
 		}
 		else {
-			front = back = nullptr;
+			front = back = ptr;
 		}
 
 		return true;
