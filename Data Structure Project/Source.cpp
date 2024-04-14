@@ -21,6 +21,7 @@ void inputFile() {
 
 int main() {
 
+	/*
 	LinkQueue testing;
 
 	testing.enqueue(1);
@@ -38,6 +39,7 @@ int main() {
 	testing.dequeue();
 
 	testing.display();
+	*/
 	
 	inputFile();
 }
