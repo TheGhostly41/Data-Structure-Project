@@ -22,6 +22,7 @@ void inputFile() {
 		SIZE *= SIZE;
 		cout << SIZE;
 
+		// RAHHHHHHHHH
 
 		/*
 		for (int i = 0; i < SIZE; i++) {
