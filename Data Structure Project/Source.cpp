@@ -6,17 +6,35 @@
 using namespace std;
 
 void inputFile() {
-	string myText;
+	string dimensions;
 
-	// Read text file
-	ifstream MyReadFile("input.txt");
+	string FileName = "input.txt";
+	ifstream inputFile;
+	inputFile.open(FileName.c_str());
 
-	// While loop with getline to read file line by line
-	while (getline(MyReadFile, myText)) {
-		cout << myText;
+	if (inputFile.is_open()) {
+
+		// Getting the first line
+		getline(inputFile, dimensions);
+
+		int SIZE = stoi(dimensions); // converts the string to an integer
+
+		SIZE *= SIZE;
+		cout << SIZE;
+
+
+		/*
+		for (int i = 0; i < SIZE; i++) {
+			inputFile >> numbers[i];
+			cout << numbers[i] << " ";
+		}
+		*/
+
+		inputFile.close();
 	}
-
-	MyReadFile.close();
+	else {
+		cout << "Cant open file or not located, File name: " << FileName << endl;
+	}
 }
 
 int main() {
