@@ -5,6 +5,9 @@
 
 using namespace std;
 
+const int arraySize = 64;
+int numbers[arraySize];
+
 void inputFile() {
 	string dimensions;
 
@@ -20,18 +23,35 @@ void inputFile() {
 		int SIZE = stoi(dimensions); // converts the string to an integer
 
 		SIZE *= SIZE;
-		cout << SIZE;
-
-		// RAHHHHHHHHH
+		cout << "Matrix Dimension: " << SIZE << endl << endl;
 
 		/*
-		for (int i = 0; i < SIZE; i++) {
+		// Goes through the entire txt file and adds it to the array
+		for (int i = 0; i < arraySize; i++) {
 			inputFile >> numbers[i];
-			cout << numbers[i] << " ";
+			cout << i+1 << ".  " << numbers[i] << endl;
 		}
 		*/
 
+		const int newSize = 8;
+		int TwoDArray[newSize][newSize];
+
+		// Adding all the data in the array
+		for (int row = 0; row < newSize; row++) {
+			for (int col = 0; col < newSize; col++) {
+				inputFile >> TwoDArray[row][col];
+			}
+		}
+
 		inputFile.close();
+
+		// Outputing data in the array
+		for (int r = 0; r < newSize; r++) {
+			for (int c = 0; c < newSize; c++) {
+				cout << TwoDArray[r][c] << "   ";
+			}
+			cout << endl;
+		}
 	}
 	else {
 		cout << "Cant open file or not located, File name: " << FileName << endl;
