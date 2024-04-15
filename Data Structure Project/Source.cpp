@@ -20,19 +20,13 @@ void inputFile() {
 		// Getting the first line
 		getline(inputFile, dimensions);
 
-		int SIZE = stoi(dimensions); // converts the string to an integer
+		// converts the string to an integer
+		int SIZE = stoi(dimensions);
 
 		SIZE *= SIZE;
 		cout << "Matrix Dimension: " << SIZE << endl << endl;
 
-		/*
-		// Goes through the entire txt file and adds it to the array
-		for (int i = 0; i < arraySize; i++) {
-			inputFile >> numbers[i];
-			cout << i+1 << ".  " << numbers[i] << endl;
-		}
-		*/
-
+		// Making 2D array
 		const int newSize = 8;
 		int TwoDArray[newSize][newSize];
 
@@ -52,6 +46,14 @@ void inputFile() {
 			}
 			cout << endl;
 		}
+
+		/*
+		// Goes through the entire txt file and adds it to the array
+		for (int i = 0; i < arraySize; i++) {
+			inputFile >> numbers[i];
+			cout << i+1 << ".  " << numbers[i] << endl;
+		}
+		*/
 	}
 	else {
 		cout << "Cant open file or not located, File name: " << FileName << endl;
