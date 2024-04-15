@@ -8,6 +8,17 @@ using namespace std;
 const int arraySize = 64;
 int numbers[arraySize];
 
+// Passing array to function
+void passingArray(int arr[][8], int newS) {
+	for (int r = 0; r < newS; r++) {
+		for (int c = 0; c < newS; c++) {
+			cout << arr[r][c] << " ";
+		}
+		cout << endl;
+	}
+}
+
+// Read and store data from txt file
 void inputFile() {
 	string dimensions;
 
@@ -42,10 +53,14 @@ void inputFile() {
 		// Outputing data in the array
 		for (int r = 0; r < newSize; r++) {
 			for (int c = 0; c < newSize; c++) {
-				cout << TwoDArray[r][c] << "   ";
+				cout << TwoDArray[r][c] << " ";
 			}
 			cout << endl;
 		}
+
+		cout << endl << endl << endl;
+		// passing array to another function
+		passingArray(TwoDArray, newSize);
 
 		/*
 		// Goes through the entire txt file and adds it to the array
