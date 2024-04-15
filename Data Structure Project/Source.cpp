@@ -5,6 +5,20 @@
 
 using namespace std;
 
+const int arraySize = 64;
+int numbers[arraySize];
+
+// Passing array to function
+void passingArray(int arr[][8], int newS) {
+	for (int r = 0; r < newS; r++) {
+		for (int c = 0; c < newS; c++) {
+			cout << arr[r][c] << " ";
+		}
+		cout << endl;
+	}
+}
+
+// Read and store data from txt file
 void inputFile() {
 	string dimensions;
 
@@ -17,21 +31,44 @@ void inputFile() {
 		// Getting the first line
 		getline(inputFile, dimensions);
 
-		int SIZE = stoi(dimensions); // converts the string to an integer
+		// converts the string to an integer
+		int SIZE = stoi(dimensions);
 
 		SIZE *= SIZE;
-		cout << SIZE;
+		cout << "Matrix Dimension: " << SIZE << endl << endl;
 
-		// RAHHHHHHHHH
+		// Making 2D array
+		const int newSize = 8;
+		int TwoDArray[newSize][newSize];
 
-		/*
-		for (int i = 0; i < SIZE; i++) {
-			inputFile >> numbers[i];
-			cout << numbers[i] << " ";
+		// Adding all the data in the array
+		for (int row = 0; row < newSize; row++) {
+			for (int col = 0; col < newSize; col++) {
+				inputFile >> TwoDArray[row][col];
+			}
 		}
-		*/
 
 		inputFile.close();
+
+		// Outputing data in the array
+		for (int r = 0; r < newSize; r++) {
+			for (int c = 0; c < newSize; c++) {
+				cout << TwoDArray[r][c] << " ";
+			}
+			cout << endl;
+		}
+
+		cout << endl << endl << endl;
+		// passing array to another function
+		passingArray(TwoDArray, newSize);
+
+		/*
+		// Goes through the entire txt file and adds it to the array
+		for (int i = 0; i < arraySize; i++) {
+			inputFile >> numbers[i];
+			cout << i+1 << ".  " << numbers[i] << endl;
+		}
+		*/
 	}
 	else {
 		cout << "Cant open file or not located, File name: " << FileName << endl;
