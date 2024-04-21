@@ -1,101 +1,106 @@
 #include <iostream>
+#include <vector>
 #include <fstream>
 #include <string>
 #include "Deque.h"
 
 using namespace std;
 
-const int arraySize = 64;
-int numbers[arraySize];
+void output(const vector<vector <int>>& graph) {
+    // Outputing data in the array
+    for (int i = 0; i < graph.size(); i++) {
+        for (int j = 0; j < graph.size(); j++) {
+            cout << graph[i][j] << " ";
+        }
 
-// Passing array to function
-void passingArray(int arr[][8], int newS) {
-	for (int r = 0; r < newS; r++) {
-		for (int c = 0; c < newS; c++) {
-			cout << arr[r][c] << " ";
-		}
-		cout << endl;
-	}
+        cout << endl;
+    }
 }
 
-// Read and store data from txt file
-void inputFile() {
-	string dimensions;
+/* Breadth First Search */
+vector<int> bfs(vector<vector <int>>& graph, int start) {
 
-	string FileName = "input.txt";
-	ifstream inputFile;
-	inputFile.open(FileName.c_str());
+    const int GOAL = 0;
+    vector<bool> visited(graph.size(), false);
+    vector<int> traversal;
+    LinkQueue q;
 
-	if (inputFile.is_open()) {
+    visited[start] = true;
+    q.enqueue(start);
 
-		// Getting the first line
-		getline(inputFile, dimensions);
+    while (!q.isEmpty()) {
+        int current = q.peek();
+        q.dequeue();
+        traversal.push_back(current);
 
-		// converts the string to an integer
-		int SIZE = stoi(dimensions);
+        for (int neighbor = 0; neighbor < graph[current].size(); neighbor++) {
+            if (graph[current][neighbor] != 0 && !visited[neighbor]) {  // Check if edge exists and neighbor is not visited
+                visited[neighbor] = true;
+                q.enqueue(neighbor);
+            }
+        }
+    }
 
-		SIZE *= SIZE;
-		cout << "Matrix Dimension: " << SIZE << endl << endl;
-
-		// Making 2D array
-		const int newSize = 8;
-		int TwoDArray[newSize][newSize];
-
-		// Adding all the data in the array
-		for (int row = 0; row < newSize; row++) {
-			for (int col = 0; col < newSize; col++) {
-				inputFile >> TwoDArray[row][col];
-			}
-		}
-
-		inputFile.close();
-
-		// Outputing data in the array
-		for (int r = 0; r < newSize; r++) {
-			for (int c = 0; c < newSize; c++) {
-				cout << TwoDArray[r][c] << " ";
-			}
-			cout << endl;
-		}
-
-		cout << endl << endl << endl;
-		// passing array to another function
-		passingArray(TwoDArray, newSize);
-
-		/*
-		// Goes through the entire txt file and adds it to the array
-		for (int i = 0; i < arraySize; i++) {
-			inputFile >> numbers[i];
-			cout << i+1 << ".  " << numbers[i] << endl;
-		}
-		*/
-	}
-	else {
-		cout << "Cant open file or not located, File name: " << FileName << endl;
-	}
+    return traversal;
 }
 
-int main() {
+void ReadInputFile() {
+    string firstLine;
 
-	/*
-	LinkQueue testing;
+    string FileName = "input.txt";
+    ifstream inputFile;
+    inputFile.open(FileName.c_str());
 
-	testing.enqueue(1);
-	testing.enqueue(4);
-	testing.enqueue(1);
+    if (!inputFile.is_open()) {
+        cout << "Cannot locate " << FileName << endl;
+    }
 
-	auto testingPeek = testing.peek();
-	cout << testingPeek << endl;
+    // Getting the first line
+    getline(inputFile, firstLine);
 
-	int testingCount = testing.getCount();
-	cout << testingCount << endl;
+    // converts the string to an integer
+    const int SIZE = stoi(firstLine);
 
-	testing.display();
+    const int dimensions = SIZE * SIZE;
+    cout << "Matrix Dimension: " << dimensions << endl << endl;
 
-	testing.dequeue();
+    // Making 2D array
+    vector<vector<int>> graph(SIZE, vector<int>(SIZE));
 
-	testing.display();
-	*/
-	
-	inputFile();
+    // Adding all the data in the array
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            inputFile >> graph[i][j];
+        }
+    }
+
+    inputFile.close();
+
+    // Outputing data in the array
+    for (int i = 0; i < SIZE; i++) {
+        for (int j = 0; j < SIZE; j++) {
+            cout << graph[i][j] << " ";
+        }
+
+        cout << endl;
+    }
+
+    cout << endl << endl << endl;
+
+    // output(graph);
+
+    int start = (0, 0);
+    vector<int> traversal = bfs(graph, start);
+
+    for (int node : traversal) {
+        cout << node << " ";
+    }
+
+}
+
+int main()
+{
+    ReadInputFile();
+
+    return 0;
 }
