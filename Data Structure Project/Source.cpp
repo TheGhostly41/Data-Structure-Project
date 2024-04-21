@@ -6,6 +6,10 @@
 
 using namespace std;
 
+// Directions
+int dRow[] = { -1, 0, 1, 0 };
+int dCol[] = { 0, 1, 0, -1 };
+
 void output(const vector<vector <int>>& graph) {
     // Outputing data in the array
     for (int i = 0; i < graph.size(); i++) {
@@ -17,31 +21,59 @@ void output(const vector<vector <int>>& graph) {
     }
 }
 
+/* isValid */
+bool isValid(vector<vector<bool>>& vis, int row, int col, int SIZE) {
+    // If cell lies out of bounds
+    if (row < 0 || col < 0 || row >= SIZE || col >= SIZE) {
+        return false;
+    }
+
+    // If cell is already visited
+    if (vis[row][col]) {
+        return false;
+    }
+
+    // Otherwise
+    return true;
+}
+
 /* Breadth First Search */
-vector<int> bfs(vector<vector <int>>& graph, int start) {
+void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int col) {
 
-    const int GOAL = 0;
-    vector<bool> visited(graph.size(), false);
-    vector<int> traversal;
-    LinkQueue q;
+    // Stores indices of the matrix cells
+    LinkQueue r;
+    LinkQueue c;
 
-    visited[start] = true;
-    q.enqueue(start);
+    int SIZE = graph.size();
 
-    while (!q.isEmpty()) {
-        int current = q.peek();
-        q.dequeue();
-        traversal.push_back(current);
+    // Mark the starting cell as visited and push it into the queue
+    r.enqueue(row);
+    c.enqueue(col);
+    vis[row][col] = true;
 
-        for (int neighbor = 0; neighbor < graph[current].size(); neighbor++) {
-            if (graph[current][neighbor] != 0 && !visited[neighbor]) {  // Check if edge exists and neighbor is not visited
-                visited[neighbor] = true;
-                q.enqueue(neighbor);
+    // Iterate while the queue is not empty
+    while (!r.isEmpty()) {
+        int x = r.peek();
+        int y = c.peek();
+
+        cout << graph[x][y] << " ";
+
+        r.dequeue();
+        c.dequeue();
+
+        // Go to the adjacent cells
+        for (int i = 0; i < 4; i++) {
+            int adjx = x + dRow[i]; // edit this to graph[row][col] to skip nodes like the trampoline
+            int adjy = y + dCol[i]; // edit this to graph[row][col] to skip nodes like the trampoline
+
+            if (isValid(vis, adjx, adjy, SIZE)) {
+                r.enqueue(adjx);
+                c.enqueue(adjy);
+
+                vis[adjx][adjy] = true;
             }
         }
     }
-
-    return traversal;
 }
 
 void ReadInputFile() {
@@ -86,15 +118,13 @@ void ReadInputFile() {
     }
 
     cout << endl << endl << endl;
+    // cout << graph[0][0] << endl;
 
     // output(graph);
 
-    int start = (0, 0);
-    vector<int> traversal = bfs(graph, start);
+    vector<vector <bool>> visited(graph.size(), vector<bool>(graph.size()));
 
-    for (int node : traversal) {
-        cout << node << " ";
-    }
+    bfs(graph, visited, 0, 0);
 
 }
 
