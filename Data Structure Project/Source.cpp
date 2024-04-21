@@ -37,6 +37,62 @@ bool isValid(vector<vector<bool>>& vis, int row, int col, int SIZE) {
     return true;
 }
 
+/* Check if the element is a Positive */
+bool isPositive(int num) {
+    if (num > 0) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+/* Checking Direction */
+string Directions(int oldR, int oldC, int newR, int newC) {
+    string direction;
+
+    if (isPositive) {
+        if (newR < oldR) {
+            direction = "N";
+        }
+        else if (newR > oldR) {
+            direction = "S";
+        }
+        else if (newC < oldC) {
+            direction = "W";
+        }
+        else if (newC > oldC) {
+            direction = "E";
+        }
+    }
+    else {
+        if (newR < oldR && newC > oldC) {
+            direction = "NE";
+        }
+        else if (newR < oldR && newC < oldC) {
+            direction = "NW";
+        }
+        else if (newR > oldR && newC > oldC) {
+            direction = "SE";
+        }
+        else if (newR > oldR && newC < oldC) {
+            direction = "SW";
+        }
+    }
+
+    return direction;
+}
+
+/* Motion | this sets the restrictions based on the element that is being read */
+void motion(vector<vector <int>>& graph) {
+
+
+
+    if (isPositive) {
+
+    }
+}
+
 /* Breadth First Search */
 void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int col) {
 
@@ -45,6 +101,13 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
     LinkQueue c;
 
     int SIZE = graph.size();
+    bool reached_End = false;
+    const int GOAL = 0;
+    int distance = 0;
+    string dir;
+
+    // vector for directions
+    vector<string> directions;
 
     // Mark the starting cell as visited and push it into the queue
     r.enqueue(row);
@@ -55,16 +118,40 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
     while (!r.isEmpty()) {
         int x = r.peek();
         int y = c.peek();
+        int oldX = 0;
+        int oldY = 0;
+
+        // Directions function && isPositive
+        // needs to be so that the previous state of x and y is saved to oldX and oldY
+
+        isPositive(graph[x][y]);
+
+        dir = Directions(oldX, oldY, x, y);
+        directions.push_back(dir);
+
+        oldX = x;
+        oldY = y;
 
         cout << graph[x][y] << " ";
 
         r.dequeue();
         c.dequeue();
 
+        /* Ends when it hits GOAL = 0
+        if (graph[x][y] == GOAL) {
+            reached_End = true;
+            break;
+        }
+        */
+
+        if (graph[x][y] > distance) {
+            distance++;
+        }
+
         // Go to the adjacent cells
         for (int i = 0; i < 4; i++) {
-            int adjx = x + dRow[i]; // edit this to graph[row][col] to skip nodes like the trampoline
-            int adjy = y + dCol[i]; // edit this to graph[row][col] to skip nodes like the trampoline
+            int adjx = x + dRow[i]; // edit this to graph[x][y] to skip nodes like the trampoline
+            int adjy = y + dCol[i]; // edit this to graph[x][y] to skip nodes like the trampoline
 
             if (isValid(vis, adjx, adjy, SIZE)) {
                 r.enqueue(adjx);
@@ -73,6 +160,12 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
                 vis[adjx][adjy] = true;
             }
         }
+    }
+
+    // Directions output
+    cout << endl;
+    for (auto dir : directions) {
+        cout << dir << " ";
     }
 }
 
@@ -93,9 +186,6 @@ void ReadInputFile() {
     // converts the string to an integer
     const int SIZE = stoi(firstLine);
 
-    const int dimensions = SIZE * SIZE;
-    cout << "Matrix Dimension: " << dimensions << endl << endl;
-
     // Making 2D array
     vector<vector<int>> graph(SIZE, vector<int>(SIZE));
 
@@ -107,6 +197,9 @@ void ReadInputFile() {
     }
 
     inputFile.close();
+
+    const int dimensions = SIZE * SIZE;
+    cout << "Matrix Dimension: " << dimensions << endl << endl;
 
     // Outputing data in the array
     for (int i = 0; i < SIZE; i++) {
