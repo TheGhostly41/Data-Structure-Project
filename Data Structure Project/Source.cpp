@@ -48,10 +48,10 @@ bool isPositive(int num) {
 }
 
 /* Checking Direction */
-string Directions(int oldR, int oldC, int newR, int newC) {
+string Directions(int oldR, int oldC, int newR, int newC, int value) {
     string direction;
 
-    if (isPositive) {
+    if (isPositive(value)) {
         if (newR < oldR) {
             direction = "N";
         }
@@ -64,6 +64,9 @@ string Directions(int oldR, int oldC, int newR, int newC) {
         else if (newC > oldC) {
             direction = "E";
         }
+    }
+    else if (value == 0) {
+        direction = "GOAL";
     }
     else {
         if (newR < oldR && newC > oldC) {
@@ -84,12 +87,12 @@ string Directions(int oldR, int oldC, int newR, int newC) {
 }
 
 /* Motion | this sets the restrictions based on the element that is being read */
-void motion(vector<vector <int>>& graph) {
-
-
-
-    if (isPositive) {
-
+void motion(vector<vector <int>>& graph, int value) {
+    if (isPositive(value)) {
+        cout << "Positive" << endl;
+    }
+    else {
+        cout << "Negative" << endl;
     }
 }
 
@@ -106,6 +109,9 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
     int distance = 0;
     string dir;
 
+    int oldX = 0;
+    int oldY = 0;
+
     // vector for directions
     vector<string> directions;
 
@@ -118,21 +124,19 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
     while (!r.isEmpty()) {
         int x = r.peek();
         int y = c.peek();
-        int oldX = 0;
-        int oldY = 0;
 
         // Directions function && isPositive
-        // needs to be so that the previous state of x and y is saved to oldX and oldY
 
-        isPositive(graph[x][y]);
+        int value = graph[x][y];
 
-        dir = Directions(oldX, oldY, x, y);
+        dir = Directions(oldX, oldY, x, y, value);
         directions.push_back(dir);
 
         oldX = x;
         oldY = y;
 
         cout << graph[x][y] << " ";
+        motion(graph, value);
 
         r.dequeue();
         c.dequeue();
@@ -148,7 +152,7 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
             distance++;
         }
 
-        // Go to the adjacent cells
+        // Go to the adjacent cells -- Marked for change
         for (int i = 0; i < 4; i++) {
             int adjx = x + dRow[i]; // edit this to graph[x][y] to skip nodes like the trampoline
             int adjy = y + dCol[i]; // edit this to graph[x][y] to skip nodes like the trampoline
