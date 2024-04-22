@@ -136,7 +136,6 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
         oldY = y;
 
         cout << graph[x][y] << " ";
-        motion(graph, value);
 
         r.dequeue();
         c.dequeue();
@@ -148,9 +147,12 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
         }
         */
 
-        if (graph[x][y] > distance) {
-            distance++;
+        if (value == GOAL) {
+            reached_End = true;
+            break;
         }
+
+        motion(graph, value);
 
         // Go to the adjacent cells -- Marked for change
         for (int i = 0; i < 4; i++) {
