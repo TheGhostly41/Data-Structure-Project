@@ -6,9 +6,10 @@
 
 using namespace std;
 
-// Directions
-int dRow[] = { -1, 0, 1, 0 };
-int dCol[] = { 0, 1, 0, -1 };
+// Global Variables
+LinkQueue r;
+LinkQueue c;
+LinkQueue d;
 
 void output(const vector<vector <int>>& graph) {
     // Outputing data in the array
@@ -97,14 +98,12 @@ void motion(vector<vector <int>>& graph, int value) {
 }
 
 /* Breadth First Search */
-void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int col) {
+vector<string> bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int col) {
 
-    // Stores indices of the matrix cells
-    LinkQueue r;
-    LinkQueue c;
-
+    // variables
     int SIZE = graph.size();
     bool reached_End = false;
+    bool Diagonal = false;
     const int GOAL = 0;
     int distance = 0;
     string dir;
@@ -129,6 +128,7 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
 
         int value = graph[x][y];
 
+        // needs change
         dir = Directions(oldX, oldY, x, y, value);
         directions.push_back(dir);
 
@@ -136,23 +136,48 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
         oldY = y;
 
         cout << graph[x][y] << " ";
-        motion(graph, value);
 
         r.dequeue();
         c.dequeue();
 
-        /* Ends when it hits GOAL = 0
-        if (graph[x][y] == GOAL) {
+        if (value == GOAL) {
             reached_End = true;
             break;
         }
-        */
 
-        if (graph[x][y] > distance) {
-            distance++;
+        vector<vector<int>> Coords;
+
+        if (!isPositive(value)) {
+            Coords = { {1, 1}, {1, -1}, {-1, 1}, {-1, -1} };
+            Diagonal = !Diagonal;
+        }
+        else {
+            if (Diagonal) {
+                Coords = { {1, 1}, {1, -1}, {-1, 1}, {-1, -1} };
+            }
+            else {
+                Coords = { {1, 0}, {-1, 0}, {0, 1}, {0, -1} };
+            }
         }
 
-        // Go to the adjacent cells -- Marked for change
+        for (int i = 0; i < Coords.size(); i++) {
+            int jump = abs(value);
+            int adjx = x + Coords[i][0] * jump;
+            int adjy = y + Coords[i][1] * jump;
+
+            if (isValid(vis, adjx, adjy, SIZE)) {
+                r.enqueue(adjx);
+                c.enqueue(adjy);
+
+                vis[adjx][adjy] = true;
+            }
+        }
+
+        // motion(graph, value);
+
+
+
+        /* Go to the adjacent cells -- Marked for change
         for (int i = 0; i < 4; i++) {
             int adjx = x + dRow[i]; // edit this to graph[x][y] to skip nodes like the trampoline
             int adjy = y + dCol[i]; // edit this to graph[x][y] to skip nodes like the trampoline
@@ -164,13 +189,10 @@ void bfs(vector<vector <int>>& graph, vector<vector<bool>>& vis, int row, int co
                 vis[adjx][adjy] = true;
             }
         }
+        */
     }
 
-    // Directions output
-    cout << endl;
-    for (auto dir : directions) {
-        cout << dir << " ";
-    }
+    return directions;
 }
 
 void ReadInputFile() {
@@ -215,13 +237,20 @@ void ReadInputFile() {
     }
 
     cout << endl << endl << endl;
-    // cout << graph[0][0] << endl;
 
     // output(graph);
 
     vector<vector <bool>> visited(graph.size(), vector<bool>(graph.size()));
 
-    bfs(graph, visited, 0, 0);
+    vector<string> directions = bfs(graph, visited, 0, 0);
+
+    // Directions output
+    cout << endl;
+
+    cout << "Path to GOAL: ";
+    for (auto dir : directions) {
+        cout << dir << " ";
+    }
 
 }
 
